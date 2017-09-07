@@ -14,26 +14,25 @@ querylist = {
 
 if __name__ == '__main__':
 	res = requests.get(Config.baseUrl, params=querylist)
-	data = json.loads(res.text)
-	print(data)
-	# if data['returnCode'] == str(0):
-	# 	with open('weishui.csv', 'w', newline='') as f:
-	# 		tablenames = Config.fieldnames
-	# 		writer = csv.DictWriter(f, fieldnames=tablenames)
-	# 		writer.writeheader()
-	# 		for row in data['DS']:
-	# 			writer.writerow({
-	# 				Config.fieldnames[0]: row['Station_Id_C'],
-	# 				Config.fieldnames[1]: row['Year'],
-	# 				Config.fieldnames[2]: row['Mon'],
-	# 				Config.fieldnames[3]: row['Day'],
-	# 				Config.fieldnames[4]: row['PRS_Avg'],
-	# 				Config.fieldnames[5]: row['TEM_Avg'],
-	# 				Config.fieldnames[6]: row['PRE_Time_2020'],
-	# 				Config.fieldnames[7]: row['RHU_Avg'],
-	# 				Config.fieldnames[8]: row['WIN_S_Inst_Max'],
-	# 				Config.fieldnames[9]: str(int(row['WIN_D_INST_Max'])-999000),
-	# 				Config.fieldnames[10]: row['WEP_Record']
-	# 			})
-	# else:
-	# 	print('failed')
+	data = json.loads(res.text, strict=False)
+	if data['returnCode'] == str(0):
+		with open('weishui.csv', 'w', newline='') as f:
+			tablenames = Config.fieldnames
+			writer = csv.DictWriter(f, fieldnames=tablenames)
+			writer.writeheader()
+			for row in data['DS']:
+				writer.writerow({
+					Config.fieldnames[0]: row['Station_Id_C'],
+					Config.fieldnames[1]: row['Year'],
+					Config.fieldnames[2]: row['Mon'],
+					Config.fieldnames[3]: row['Day'],
+					Config.fieldnames[4]: row['PRS_Avg'],
+					Config.fieldnames[5]: row['TEM_Avg'],
+					Config.fieldnames[6]: row['PRE_Time_2020'],
+					Config.fieldnames[7]: row['RHU_Avg'],
+					Config.fieldnames[8]: row['WIN_S_Inst_Max'],
+					Config.fieldnames[9]: row['WIN_D_INST_Max'],
+					Config.fieldnames[10]: row['WEP_Record']
+				})
+	else:
+		print('failed')
