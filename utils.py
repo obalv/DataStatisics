@@ -1,3 +1,5 @@
+from .config import Config
+
 WindCoverter = {
 
 }
@@ -25,8 +27,15 @@ def initializequeryparams(**kwargs):
 	pass
 
 
-def convertwinddir(s):
-	if int(s) > 10000:
-		_s = int(s) - 999000
-		return Dirs.get(_s, 'C')
-	elif int(s) < 360:
+# def convertwinddir(s):
+# 	if int(s) > 10000:
+# 		_s = int(s) - 999000
+# 		return Dirs.get(_s, 'C')
+
+def generatequerylist(datacode, elements, timerange, staids):
+	querylist = {}
+	querylist['dataCode'] = datacode
+	querylist['elements'] = elements
+	querylist['timeRange'] = timerange
+	querylist['staIds'] = staids
+	return querylist

@@ -1,38 +1,24 @@
-from config import Config
 import requests, json, csv
-
-querylist = {
-	'userId': 'BCWH_BFJU_MDAA',
-	'pwd': '52feiqiang',
-	'interfaceId': 'getSurfEleByTimeRangeAndStaID',
-	'dataCode': 'SURF_CHN_MUL_DAY',
-	'dataFormat': 'json',
-	'elements': 'Station_Id_C,Year,Mon,Day,PRS_Avg,WIN_S_Inst_Max,WIN_D_INST_Max,TEM_Avg,RHU_Avg,PRE_Time_2020,WEP_Record',
-	'timeRange': '[20150101000000,20170906000000]',
-	'staIds': '57469'
-}
+from .utils import generatequerylist
+from .config import Config
 
 if __name__ == '__main__':
+	querylist = generatequerylist('SURF_CHN_MUL_MON',
+	                              'Station_Name,Station_Id_C,Year,Mon,Lat,Lon,Alti,WIN_S_Max,WIN_S_Inst_Max,WIN_S_2mi_Avg'
+	                              , '[20151001000000,20170801000000]',
+	                              '57469,Q6401,Q6402,Q6403,Q6404,Q6405,Q6406,Q6407,Q6408,Q6409,Q6410,Q6411,Q6412,Q6413,\
+	                              Q6414,Q6415,Q6416,Q6417,Q6418,Q6419,Q6420,Q6421,Q6422,Q6423,Q6424,Q6425,Q6426')
 	res = requests.get(Config.baseUrl, params=querylist)
 	data = json.loads(res.text, strict=False)
 	if data['returnCode'] == str(0):
-		with open('weishui.csv', 'w', newline='') as f:
+		with open('feng.csv', 'w', newline='') as f:
 			tablenames = Config.fieldnames
 			writer = csv.DictWriter(f, fieldnames=tablenames)
 			writer.writeheader()
 			for row in data['DS']:
-				writer.writerow({
-					Config.fieldnames[0]: row['Station_Id_C'],
-					Config.fieldnames[1]: row['Year'],
-					Config.fieldnames[2]: row['Mon'],
-					Config.fieldnames[3]: row['Day'],
-					Config.fieldnames[4]: row['PRS_Avg'],
-					Config.fieldnames[5]: row['TEM_Avg'],
-					Config.fieldnames[6]: row['PRE_Time_2020'],
-					Config.fieldnames[7]: row['RHU_Avg'],
-					Config.fieldnames[8]: row['WIN_S_Inst_Max'],
-					Config.fieldnames[9]: row['WIN_D_INST_Max'],
-					Config.fieldnames[10]: row['WEP_Record']
-				})
+				for index in range(len(Config.fieldnames)):
+					writer.writerow({
+						Config.fieldnames[index]: row[index]
+					})
 	else:
 		print('failed')
