@@ -38,4 +38,8 @@ def generatequerylist(datacode, elements, timerange, staids):
 	querylist['elements'] = elements
 	querylist['timeRange'] = timerange
 	querylist['staIds'] = staids
+	querylist['userId'] = Config.userId
+	querylist['pwd'] = Config.pwd
+	querylist['interfaceId'] = Config.interfaceId
+	querylist['dataFormat'] = Config.dataFormat
 	return querylist
